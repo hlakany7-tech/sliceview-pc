@@ -1,0 +1,36 @@
+{
+  "name": "Sliceview PC",
+  "short_name": "Sliceview PC",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0e10",
+  "theme_color": "#0a0e10",
+  "description": "Fast DICOM viewer for Windows and Mac: CT and MRI, MPR, compare, measurements and reports, with RadiAnt-style mouse and keys.",
+  "categories": [
+    "medical",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
