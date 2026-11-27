@@ -1,0 +1,47 @@
+# Builds, tests and packages Sliceview on real Windows: unit and end-to-end tests, the app, the portable exe and
+# both installers, then a silent install / open a study / uninstall check. The results are attached to the run.
+name: Windows build
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Unit tests
+        run: npm run test:unit
+      - name: End-to-end tests (the real app)
+        run: npm run test:e2e
+      - name: NSIS
+        shell: pwsh
+        run: |
+          $m = 'C:\Program Files (x86)\NSIS\makensis.exe'
+          if (-not (Test-Path $m)) { choco install nsis -y --no-progress }
+          "MAKENSIS=$m" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Build app, portable exe and installers
+        run: npm run dist
+      - name: Install, open a study, uninstall
+        shell: pwsh
+        run: scripts\windows-smoke.ps1 -Installer (Get-ChildItem dist\Sliceview-Setup-[0-9]*-x64.exe).FullName
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Sliceview-windows
+          path: |
+            dist/Sliceview-Setup-*.exe
+            dist/Sliceview-*-portable.exe
+          if-no-files-found: error

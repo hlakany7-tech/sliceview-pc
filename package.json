@@ -1,0 +1,101 @@
+{
+  "name": "sliceview-pc",
+  "productName": "Sliceview",
+  "version": "1.0.0",
+  "description": "Fast DICOM viewer for Windows: CT and MRI, MPR, compare, measurements and reports.",
+  "main": "electron/main.js",
+  "author": "Sliceview",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test \"test/unit/*.test.js\"",
+    "test:e2e": "node --test --test-concurrency=1 \"test/e2e/*.test.js\"",
+    "icons": "node scripts/make-icons.mjs",
+    "dist": "electron-builder --win dir portable --x64 && node scripts/build-installer.mjs",
+    "dist:linux-test": "electron-builder --linux dir -c.electronFuses.enableNodeCliInspectArguments=true -c.directories.output=out/linux-test",
+    "dist:installer": "node scripts/build-installer.mjs"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/inter": "5.3.0"
+  },
+  "devDependencies": {
+    "electron": "45.3.2",
+    "electron-builder": "26.18.1",
+    "playwright-core": "1.63.0",
+    "png-to-ico": "3.0.2"
+  },
+  "build": {
+    "appId": "com.sliceview.pc",
+    "productName": "Sliceview",
+    "copyright": "Copyright \u00a9 2026 Sliceview",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "web/**/*",
+      "index.html",
+      "favicon-32.png",
+      "icon-192.png",
+      "icon-512.png",
+      "icon-maskable-512.png",
+      "apple-touch-icon.png",
+      "build/icon.ico",
+      "build/icon.png",
+      "package.json",
+      "!node_modules/@fontsource/**/*",
+      "node_modules/@fontsource/inter/files/inter-latin-{400,500,600}-normal.woff2",
+      "node_modules/@fontsource/inter/files/inter-latin-ext-{400,500,600}-normal.woff2",
+      "node_modules/@fontsource/inter/LICENSE",
+      "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-{400,500}-normal.woff2",
+      "node_modules/@fontsource/ibm-plex-mono/LICENSE",
+      "node_modules/@fontsource/*/package.json"
+    ],
+    "asar": true,
+    "electronFuses": {
+      "runAsNode": false,
+      "enableCookieEncryption": true,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true,
+      "grantFileProtocolExtraPrivileges": false
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "executableName": "Sliceview",
+      "legalTrademarks": "Sliceview",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "portable": {
+      "artifactName": "Sliceview-${version}-x64-portable.${ext}"
+    },
+    "linux": {
+      "target": "dir",
+      "icon": "build/icon.png",
+      "category": "MedicalSoftware"
+    },
+    "electronLanguages": [
+      "en-US"
+    ],
+    "publish": null
+  }
+}
